@@ -1,38 +1,45 @@
 # Documento de Diseño – Sistema Básico de Tickets
 
-## 1. Presentación del aplicante
+## 1. Contexto y objetivo del sistema
 
-Mi nombre es Sergio Cárdenas. Soy estudiante de Ingeniería de Sistemas y tengo interés en el desarrollo de aplicaciones web, el modelado de datos, la programación backend y el uso de tecnologías como Python, Django y bases de datos relacionales.
+Para el caso, se presentan dos tipos de usuarios principales divididos por sus roles, comenzando con el usuario que denominamos usuario cliente, este en el sistema de tickets tiene como objetivo permitir que usuarios autenticados puedan registrar solicitudes de soporte, consultar el estado de los tickets que han creado y visualizar la respuesta entregada por un administrador.
 
-## 2. Contexto y objetivo del sistema
+Desde el lado administrativo, esta el usuario admin, en este el sistema permite que un administrador gestione los tickets desde el panel de Django Admin, modifique su estado y registre una respuesta breve para el usuario.
 
-El sistema básico de tickets tiene como objetivo permitir que usuarios autenticados puedan registrar solicitudes de soporte, consultar el estado de los tickets que han creado y visualizar la respuesta entregada por un administrador.
+## 2. Alcance de la solución
 
-Desde el lado administrativo, el sistema permite que un administrador gestione los tickets desde el panel de Django Admin, modifique su estado y registre una respuesta breve para el usuario.
+El sistema incluye las siguientes funcionalidades, organizadas según el tipo de usuario que interactúa con la aplicación.
 
-## 3. Alcance de la solución
+### Funcionalidades comunes
 
-El sistema incluye las siguientes funcionalidades:
+- Inicio de sesión mediante el sistema de autenticación de Django.
+- Cierre de sesión del sistema.
+- Acceso restringido únicamente a usuarios autenticados.
 
-- Inicio de sesión de usuarios mediante el sistema de autenticación de Django.
-- Creación de tickets por parte de usuarios autenticados.
-- Consulta del listado de tickets creados por el usuario autenticado.
+### Usuario cliente
+
+- Creación de tickets de soporte mediante un formulario simple. 
+- Selección de una categoría para clasificar la solicitud. 
+- Consulta del listado de tickets creados por el propio usuario.
 - Consulta del detalle de un ticket propio.
-- Gestión de tickets desde Django Admin.
-- Cambio de estado del ticket por parte del administrador.
+- Visualización del estado actual del ticket.
+- Visualización de la respuesta administrativa, si existe.
+
+### Usuario administrador
+
+- Gestión de tickets desde el panel de Django Admin.
+- Consulta de tickets creados por los usuarios.
+- Cambio del estado del ticket.
 - Registro de una respuesta administrativa para el usuario.
+- Gestión de categorías desde el panel de administración.
 
 El sistema no incluye:
 
 - Registro público de usuarios.
-- Recuperación de contraseña.
-- Envío de correos electrónicos.
 - Manejo de prioridades.
-- Historial detallado de cambios.
 - Edición o eliminación de tickets por parte del usuario.
-- API REST.
 
-## 4. Historias de usuario
+## 3. Historias de usuario
 
 ### HU-01 – Inicio de sesión
 
@@ -54,33 +61,33 @@ Como usuario autenticado, quiero consultar el detalle de un ticket propio para r
 
 Como administrador, quiero revisar los tickets desde Django Admin, cambiar su estado y registrar una respuesta para informar al usuario sobre la atención de su solicitud.
 
-## 5. Reglas de negocio
+## 4. Reglas de negocio
 
 | Código | Regla |
 |---|---|
 | RN-01 | Solo los usuarios autenticados pueden crear tickets. |
 | RN-02 | Solo los usuarios autenticados pueden consultar tickets. |
 | RN-03 | El estado inicial de todo ticket debe ser “Abierto”. |
-| RN-04 | El usuario no puede seleccionar ni modificar el estado del ticket. |
+| RN-04 | El usuario no puede modificar el estado del ticket. |
 | RN-05 | El usuario solo puede consultar tickets creados por él mismo. |
 | RN-06 | Solo el administrador puede cambiar el estado del ticket desde Django Admin. |
 | RN-07 | No se permite crear tickets sin título. |
 | RN-08 | No se permite crear tickets sin descripción. |
 | RN-09 | No se permite crear tickets sin categoría. |
 
-## 6. Decisiones de diseño
+## 5. Decisiones de diseño
 
-Se decidió utilizar el sistema de autenticación nativo de Django para aprovechar un mecanismo ya integrado, probado y adecuado para controlar el acceso de usuarios al sistema.
+1. Se decidió utilizar el sistema de autenticación nativo de Django para aprovechar un mecanismo ya integrado, probado y adecuado para controlar el acceso de usuarios al sistema.
 
-Se decidió utilizar Django Admin para la gestión administrativa de los tickets, ya que el requerimiento indica que el administrador debe revisar los tickets, cambiar su estado y registrar respuestas desde este panel.
+2. Se decidió utilizar Django Admin para la gestión administrativa de los tickets, ya que el requerimiento indica que el administrador debe revisar los tickets, cambiar su estado y registrar respuestas desde este panel.
 
-Se decidió crear un modelo `Categoria` separado del modelo `Ticket` para permitir una clasificación ordenada y reutilizable de las solicitudes.
+3. Se decidió crear un modelo `Categoria` separado del modelo `Ticket` para permitir una clasificación ordenada y reutilizable de las solicitudes.
 
-Se decidió manejar el estado del ticket mediante opciones predefinidas para evitar valores inválidos y mantener consistencia en la información.
+4. Se decidió manejar el estado del ticket mediante opciones predefinidas para evitar valores inválidos y mantener consistencia en la información.
 
-Se decidió que el formulario de creación de tickets solo permita ingresar título, descripción y categoría. Los campos de usuario, fecha de creación y estado inicial son asignados automáticamente por el sistema.
+5. Se decidió que el formulario de creación de tickets solo permita ingresar título, descripción y categoría. Los campos de usuario, fecha de creación y estado inicial son asignados automáticamente por el sistema.
 
-## 7. Modelo de clases UML
+## 6. Modelo de clases UML
 
 ```mermaid
 classDiagram
@@ -110,7 +117,7 @@ classDiagram
     Categoria "1" --> "*" Ticket : clasifica
 ```
 
-## 8. Modelo relacional de base de datos
+## 7. Modelo relacional de base de datos
 
 ```mermaid
 erDiagram
@@ -142,7 +149,7 @@ erDiagram
     }
 ```
 
-## 9. Flujo principal del sistema
+## 8. Flujo principal del sistema
 
 ```mermaid
 flowchart TD
@@ -159,7 +166,7 @@ flowchart TD
     K --> L[Usuario visualiza estado y respuesta en el detalle]
 ```
 
-## 10. Categorías propuestas
+## 9. Categorías propuestas
 
 Las categorías propuestas para clasificar los tickets son:
 
@@ -173,27 +180,18 @@ Las categorías propuestas para clasificar los tickets son:
 
 Estas categorías fueron definidas con base en un entorno institucional simple, buscando cubrir los casos de soporte más comunes sin agregar complejidad innecesaria al sistema.
 
-## 11. Seguridad y control de acceso
+## 10. Seguridad y control de acceso
 
-El sistema restringe la creación y consulta de tickets únicamente a usuarios autenticados.
+El sistema restringe la creación y consulta de tickets únicamente a usuarios autenticados. Para evitar accesos no autorizados, las vistas de listado y detalle filtran los tickets por el usuario autenticado. De esta manera, un usuario no puede consultar tickets creados por otros usuarios, y el estado del ticket no se incluye en el formulario de creación. Este campo se asigna automáticamente como “Abierto” y solo puede ser modificado por el administrador desde Django Admin.
 
-Para evitar accesos no autorizados, las vistas de listado y detalle filtran los tickets por el usuario autenticado. De esta manera, un usuario no puede consultar tickets creados por otros usuarios.
-
-El estado del ticket no se incluye en el formulario de creación. Este campo se asigna automáticamente como “Abierto” y solo puede ser modificado por el administrador desde Django Admin.
-
-## 12. Supuestos
+## 11. Supuestos
 
 - Los usuarios serán creados previamente por el administrador.
 - Las categorías iniciales podrán ser creadas desde Django Admin.
 - El sistema será ejecutado localmente usando SQLite.
 - No se implementa registro público de usuarios.
-- No se implementa recuperación de contraseña.
-- No se implementan notificaciones por correo electrónico.
 - La interfaz será simple y basada en plantillas HTML de Django.
-- El sistema se desarrolla como una prueba técnica de alcance limitado.
 
-## 13. Uso de herramientas de inteligencia artificial
+## 12. Uso de herramientas de inteligencia artificial
 
-Se utilizó ChatGPT como herramienta de apoyo para orientar el diseño inicial del proyecto, revisar buenas prácticas en Django, validar aspectos básicos de seguridad y apoyar la redacción de documentación técnica.
-
-La implementación, las pruebas, las decisiones finales de diseño y la comprensión del código fueron responsabilidad del aplicante.
+Se utilizó ChatGPT como herramienta de apoyo para orientar el diseño inicial del proyecto, revisar buenas prácticas en Django, validar aspectos básicos de seguridad y apoyar la redacción de documentación técnica. La implementación, las pruebas, las decisiones finales de diseño y la comprensión del código fueron responsabilidad del aplicante.
