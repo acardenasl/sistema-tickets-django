@@ -89,82 +89,15 @@ Como administrador, quiero revisar los tickets desde Django Admin, cambiar su es
 
 ## 6. Modelo de clases UML
 
-```mermaid
-classDiagram
-    class User {
-        int id
-        string username
-        string email
-        string password
-    }
-
-    class Categoria {
-        int id
-        string nombre
-        string descripcion
-    }
-
-    class Ticket {
-        int id
-        string titulo
-        string descripcion
-        string estado
-        datetime fecha_creacion
-        string respuesta_admin
-    }
-
-    User "1" --> "*" Ticket : crea
-    Categoria "1" --> "*" Ticket : clasifica
-```
+![alt text](image-3.png)
 
 ## 7. Modelo relacional de base de datos
 
-```mermaid
-erDiagram
-    AUTH_USER ||--o{ TICKETS_TICKET : crea
-    TICKETS_CATEGORIA ||--o{ TICKETS_TICKET : clasifica
-
-    AUTH_USER {
-        int id PK
-        string username
-        string password
-        string email
-    }
-
-    TICKETS_CATEGORIA {
-        int id PK
-        string nombre
-        string descripcion
-    }
-
-    TICKETS_TICKET {
-        int id PK
-        int usuario_id FK
-        int categoria_id FK
-        string titulo
-        text descripcion
-        string estado
-        datetime fecha_creacion
-        text respuesta_admin
-    }
-```
+![alt text](image-1.png)
 
 ## 8. Flujo principal del sistema
 
-```mermaid
-flowchart TD
-    A[Usuario ingresa al sistema] --> B[Inicia sesión]
-    B --> C{¿Autenticación válida?}
-    C -- No --> D[Permanece en login]
-    C -- Sí --> E[Accede al sistema]
-    E --> F[Crea un ticket]
-    F --> G[Sistema asigna usuario, fecha y estado Abierto]
-    G --> H[Usuario consulta Mis tickets]
-    H --> I[Usuario abre detalle de un ticket propio]
-    I --> J[Administrador revisa ticket en Django Admin]
-    J --> K[Administrador cambia estado y registra respuesta]
-    K --> L[Usuario visualiza estado y respuesta en el detalle]
-```
+![alt text](image-2.png)
 
 ## 9. Categorías propuestas
 
@@ -194,4 +127,4 @@ El sistema restringe la creación y consulta de tickets únicamente a usuarios a
 
 ## 12. Uso de herramientas de inteligencia artificial
 
-Se utilizó ChatGPT como herramienta de apoyo para orientar el diseño inicial del proyecto, revisar buenas prácticas en Django, validar aspectos básicos de seguridad y apoyar la redacción de documentación técnica. La implementación, las pruebas, las decisiones finales de diseño y la comprensión del código fueron responsabilidad del aplicante.
+Se utilizó IA como herramienta de apoyo para revisar buenas prácticas en Django, validar aspectos básicos de seguridad y apoyar la redacción de documentación técnica. La implementación, las pruebas, las decisiones finales de diseño y la comprensión del código fueron responsabilidad del aplicante.
