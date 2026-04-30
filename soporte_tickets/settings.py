@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tickets',
 ]
 
 MIDDLEWARE = [
@@ -115,3 +116,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+#Si alguien no autenticado intenta entrar a una página protegida, Django lo manda a /login/.
+LOGIN_URL = 'login'
+
+#Después de iniciar sesión correctamente, lo manda a /mis-tickets/.
+LOGIN_REDIRECT_URL = 'mis_tickets'
+
+#Después de cerrar sesión, lo manda a /login/.
+LOGOUT_REDIRECT_URL = 'login'
