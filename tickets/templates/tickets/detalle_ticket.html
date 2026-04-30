@@ -1,0 +1,24 @@
+{% extends "tickets/base.html" %}
+
+{% block content %}
+<h2>Detalle del ticket</h2>
+
+<p><strong>Título:</strong> {{ ticket.titulo }}</p>
+<p><strong>Categoría:</strong> {{ ticket.categoria.nombre }}</p>
+<p><strong>Estado:</strong> {{ ticket.get_estado_display }}</p>
+<p><strong>Fecha de creación:</strong> {{ ticket.fecha_creacion }}</p>
+
+<h3>Descripción</h3>
+<p>{{ ticket.descripcion }}</p>
+
+<h3>Respuesta del administrador</h3>
+{% if ticket.respuesta_admin %}
+    <p>{{ ticket.respuesta_admin }}</p>
+{% else %}
+    <p>Aún no hay respuesta del administrador.</p>
+{% endif %}
+
+<p>
+    <a href="{% url 'mis_tickets' %}">Volver a mis tickets</a>
+</p>
+{% endblock %}

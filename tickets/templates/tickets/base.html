@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Tickets</title>
+</head>
+<body>
+    <header>
+        <h1>Sistema Básico de Tickets</h1>
+
+        {% if user.is_authenticated %}
+            <p>
+                Usuario: {{ user.username }} |
+                <a href="{% url 'mis_tickets' %}">Mis tickets</a> |
+                <a href="{% url 'crear_ticket' %}">Crear ticket</a> |
+                <a href="{% url 'logout' %}">Cerrar sesión</a>
+            </p>
+        {% endif %}
+
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
