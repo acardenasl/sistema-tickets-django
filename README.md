@@ -417,9 +417,8 @@ Se realizaron las siguientes pruebas manuales:
 
 Durante el desarrollo se utilizó inteligencia artificial como herramienta de apoyo para:
 
-- Organizar el diseño general del sistema.
-- Revisar buenas prácticas básicas de Django.
-- Apoyar la orientación técnica durante algunos procesos de implementación.
+- Revisar buenas prácticas en Django.
+- Apoyar la orientación técnica en procesos de Django
 - Apoyar la redacción del README y del documento de diseño.
 - Validar decisiones de seguridad, rutas, modelos y formularios.
 
